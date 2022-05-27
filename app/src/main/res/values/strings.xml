@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">LoFiBuddy</string>
+
+    <!-- Common -->
+    <string name="error_occurred">The following error has occurred: %1$s</string>
+
+    <!-- Add Member Content -->
+    <string name="add_member_top_bar">Add Member</string>
+    <string name="warning">Warning</string>
+    <string name="some_fields_not_filled">Some of the fields are not filled. Please fill all the fields.</string>
+
+    <string name="name_label">Name</string>
+    <string name="name_hint">Please enter your name</string>
+    <string name="position_label">Position</string>
+    <string name="position_hint">Please enter your position</string>
+    <string name="age_label">Age</string>
+    <string name="age_hint">Please enter your age</string>
+    <string name="location_label">Location</string>
+    <string name="location_hint">Please enter your location</string>
+    <string name="yearsInHipo_label"># of years in Hipo</string>
+    <string name="yearsInHipo_hint">Please enter how many years you worked at Hipo</string>
+    <string name="github_label">Github</string>
+    <string name="github_hint">Please enter your Github username</string>
+
+    <string name="save_button">Save</string>
+
+
+    <!-- Member Detail Content -->
+    <string name="repositories">Repositories</string>
+    <string name="profile">Profile</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+
+
+    <!-- Member List Content -->
+    <string name="members_list_top_bar">Members</string>
+    <string name="add_member_button">Add Member</string>
+    <string name="search">Search</string>
+
+
+
+</resources>
