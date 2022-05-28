@@ -11,6 +11,10 @@ A simple music player with relaxing backgrounds.
 
 <br>
 
+## Preview
+
+<img src="/previews/preview.gif"/>
+
 ## Made with
 
 * [Kotlin](https://kotlinlang.org/)
