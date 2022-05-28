@@ -19,6 +19,12 @@ A simple music player with relaxing backgrounds.
 
 * [Kotlin](https://kotlinlang.org/)
 
+## Controls
+
+* <b>Play/Pause:</b> Central button
+* <b>Change radio:</b> Double tap screen
+* <b>Change background image:</b> Swipe left/right
+
 ## Download
 Go to the [Releases](https://github.com/PizzaMarinara/LoFiBuddy/releases) to download the latest APK.
 
