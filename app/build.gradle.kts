@@ -86,6 +86,9 @@ dependencies {
     // implementation(Libs.Hilt.compose)
     // kapt(Libs.Hilt.compiler)
 
+    // YoutubePlayer
+    implementation(Libs.YoutubePlayer.player)
+
     // Coil
     implementation(Libs.Coil.main)
     implementation(Libs.Coil.compose)

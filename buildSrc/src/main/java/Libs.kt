@@ -126,6 +126,11 @@ object Libs {
             "com.google.accompanist:accompanist-webview:$version"
     }
 
+    object YoutubePlayer {
+        private const val version = "11.0.1"
+        const val player = "com.pierfrancescosoffritti.androidyoutubeplayer:core:$version"
+    }
+
     object App {
         const val minSdkVersion = 24
         const val targetSdkVersion = 31

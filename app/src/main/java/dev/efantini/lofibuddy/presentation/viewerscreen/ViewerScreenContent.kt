@@ -2,13 +2,13 @@ package dev.efantini.lofibuddy.presentation.viewerscreen
 
 import android.content.pm.ActivityInfo
 import android.os.Build.VERSION.SDK_INT
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.LinearLayout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -21,6 +21,9 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dev.efantini.lofibuddy.R
 import dev.efantini.lofibuddy.presentation.shared.elements.LockScreenOrientation
 
@@ -32,12 +35,13 @@ fun ViewerScreenContent() {
     systemUiController.isNavigationBarVisible = false
     systemUiController.isSystemBarsVisible = false
 
-    AndroidView(factory = { ctx ->
-        android.widget.Button(ctx).apply {
-            text = ""
-            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        }
-    }, modifier = Modifier.padding(8.dp).zIndex(2F))
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+        )
+    }
+
+    ViewerBox()
 
     val context = LocalContext.current
     val imageLoader = ImageLoader.Builder(context)
@@ -60,4 +64,26 @@ fun ViewerScreenContent() {
         modifier = Modifier.fillMaxSize()
     )
     LockScreenOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+}
+
+@Composable
+fun ViewerBox() {
+    AndroidView(
+        modifier = Modifier
+            .padding(8.dp)
+            .zIndex(-2F),
+        factory = { context ->
+            YouTubePlayerView(
+                context = context
+            ).apply {
+                this.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        super.onReady(youTubePlayer)
+                        val videoId = "-9gEgshJUuY"
+                        youTubePlayer.loadVideo(videoId, 0F)
+                    }
+                })
+            }
+        }
+    )
 }
