@@ -11,8 +11,8 @@ android {
         applicationId = Libs.App.applicationId
         minSdk = Libs.App.minSdkVersion
         targetSdk = Libs.App.targetSdkVersion
-        versionCode = ReleaseConfig.appVersionCode
-        versionName = ReleaseConfig.appVersionName
+        versionCode = 1
+        versionName = "1.0"
         testInstrumentationRunner = "dev.efantini.lofibuddy.CustomTestRunner"
     }
     buildTypes {
