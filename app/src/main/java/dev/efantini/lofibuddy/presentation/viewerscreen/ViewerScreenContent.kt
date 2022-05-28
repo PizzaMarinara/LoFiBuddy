@@ -2,7 +2,6 @@ package dev.efantini.lofibuddy.presentation.viewerscreen
 
 import android.content.pm.ActivityInfo
 import android.os.Build.VERSION.SDK_INT
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -11,10 +10,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -26,8 +28,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -50,6 +54,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import dev.efantini.lofibuddy.R
 import dev.efantini.lofibuddy.presentation.shared.elements.LockScreenOrientation
 import dev.efantini.lofibuddy.presentation.shared.elements.findActivity
+import dev.efantini.lofibuddy.presentation.shared.theme.KarlaFontFamily
+import dev.efantini.lofibuddy.shared.Backgrounds
+import dev.efantini.lofibuddy.shared.Radios
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -60,8 +67,8 @@ import kotlinx.coroutines.withContext
 fun ViewerScreenContent() {
     val systemUiController: SystemUiController = rememberSystemUiController()
 
-    val videoId by remember { mutableStateOf("-9gEgshJUuY") }
-    // var backgroundImageUrl by remember { mutableStateOf("-9gEgshJUuY") }
+    var radio by remember { mutableStateOf(Radios.getNext()) }
+    var background by remember { mutableStateOf(Backgrounds.getNext()) }
 
     var playerState by remember { mutableStateOf("") }
     var myPlayer by remember { mutableStateOf<YouTubePlayer?>(null) }
@@ -82,8 +89,6 @@ fun ViewerScreenContent() {
         }
     }
 
-    Log.d("DEBUGO", "visible? ${controlsVisibility.value}")
-
     systemUiController.isStatusBarVisible = false
     systemUiController.isNavigationBarVisible = false
     systemUiController.isSystemBarsVisible = false
@@ -103,7 +108,7 @@ fun ViewerScreenContent() {
     val listener = object : AbstractYouTubePlayerListener() {
         override fun onReady(youTubePlayer: YouTubePlayer) {
             super.onReady(youTubePlayer)
-            youTubePlayer.loadVideo(videoId, 0F)
+            youTubePlayer.loadVideo(radio.videoId, 0F)
         }
 
         override fun onStateChange(
@@ -126,15 +131,48 @@ fun ViewerScreenContent() {
             }
         }
         .build()
+
+    val offsetX = remember { mutableStateOf(0f) }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable { showButtonThenFade() },
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragEnd = { offsetX.value = 0F },
+                    onHorizontalDrag = { change, dragAmount ->
+                        val originalX = Offset(offsetX.value, 0f)
+                        val summedX = originalX + Offset(x = dragAmount, y = 0f)
+                        val newValueX = Offset(x = summedX.x, y = 0f)
+                        if (newValueX.x >= 1200) {
+                            background = Backgrounds.getNext()
+                            offsetX.value = 0F
+                        } else if (newValueX.x <= -1200) {
+                            background = Backgrounds.getPrevious()
+                            offsetX.value = 0F
+                        } else {
+                            offsetX.value = newValueX.x
+                        }
+                        change.consume()
+                    }
+                )
+            }
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onDoubleTap = {
+                        val next = Radios.getNext()
+                        myPlayer?.loadVideo(next.videoId, 0F)
+                        radio = next
+                    },
+                    onTap = {
+                        showButtonThenFade()
+                    }
+                )
+            },
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(R.drawable.rainy)
+                .data(background)
                 .crossfade(true)
                 .build(),
             imageLoader = imageLoader,
@@ -175,6 +213,17 @@ fun ViewerScreenContent() {
                 )
             }
         }
+        Text(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(
+                    horizontal = 10.dp,
+                    vertical = 10.dp
+                ),
+            text = radio.name,
+            color = Color.White,
+            fontFamily = KarlaFontFamily
+        )
     }
 }
 
