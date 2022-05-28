@@ -102,8 +102,8 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
     testImplementation(Libs.Kotlin.Coroutines.test)
     testImplementation(Libs.JUnit.junit)
-    androidTestImplementation(Libs.Hilt.test)
-    kaptAndroidTest(Libs.Hilt.testCompiler)
+    // androidTestImplementation(Libs.Hilt.test)
+    // kaptAndroidTest(Libs.Hilt.testCompiler)
 
     // Desugaring
     coreLibraryDesugaring(Libs.Desugaring.desugarJdk)
